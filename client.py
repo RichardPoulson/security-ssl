@@ -14,7 +14,9 @@
 """
 
 import socket
-import Crypto
+from Crypto.Cipher import AES
+from Crypto.PublicKey import RSA
+from Crypto import Random
 import base64
 import os
 
@@ -48,7 +50,7 @@ def encrypt_handshake(session_key):
 # TODO: Encrypts the message using AES. Same as server function
 def encrypt_message(message, session_key):
     message = pad_message(message)
-    cipertext = AES.new(session_key, AES.MODE_cCBC, iv)
+    cipertext = AES.new(session_key, AES.MODE_CBC, iv)
     return base64.b64encode(iv + cipher.encrypt(message))
 
 
