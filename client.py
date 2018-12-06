@@ -55,7 +55,9 @@ def encrypt_message(message, session_key):
 # TODO: Decrypts the message using AES. Same as server function
 def decrypt_message(message, session_key):
     message = base64.b64decode(message)
-    pass
+    cipher = AES.new(session_key, AES.MODE_CFB, iv)
+    msg = iv + cipher.decrypt(client_message)
+    return msg
 
 
 # Sends a message over TCP
@@ -84,22 +86,22 @@ def main():
     try:
         # Message that we need to send
         message = user + ' ' + password
-
         # TODO: Generate random AES key
-
+        key = generate_key()
         # TODO: Encrypt the session key using server's public key
-
+        ekey = encrypt_handshake(key)
         # TODO: Initiate handshake
-
+        send_message(sock, ekey)
         # Listen for okay from server (why is this necessary?)
         if receive_message(sock).decode() != "okay":
             print("Couldn't connect to server")
             exit(0)
 
         # TODO: Encrypt message and send to server
-
+        send_message(sock, encrypt_message(message, key))
         # TODO: Receive and decrypt response from server and print
-
+        msg = decrypt_message(receive_message(sock).decode(), key)
+        print(msg)
     finally:
         print('closing socket')
         sock.close()
