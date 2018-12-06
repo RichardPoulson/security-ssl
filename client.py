@@ -14,6 +14,9 @@
 """
 
 import socket
+import Crypto
+import base64
+import os
 
 iv = "G4XO4L\X<J;MPPLD"
 
@@ -28,22 +31,30 @@ def pad_message(message):
 
 # TODO: Generate a random AES key
 def generate_key():
-    pass
+    return os.urandom(16)
 
 
 # TODO: Takes an AES session key and encrypts it using the server's
 # TODO: public key and returns the value
 def encrypt_handshake(session_key):
-    pass
+    with open('sshkeys.txt.pub', 'r') as file:
+        serverPubKey = file.read()
+    salt = 'F'
+    pubkeyObj = RSA.importKey(serverPubKey)
+    encryMessage = pubkeyObj.encrypt(session_key, salt)[0]
+    return encryMessage
 
 
 # TODO: Encrypts the message using AES. Same as server function
 def encrypt_message(message, session_key):
-    pass
+    message = pad_message(message)
+    cipertext = AES.new(session_key, AES.MODE_cCBC, iv)
+    return base64.b64encode(iv + cipher.encrypt(message))
 
 
 # TODO: Decrypts the message using AES. Same as server function
 def decrypt_message(message, session_key):
+    message = base64.b64decode(message)
     pass
 
 
