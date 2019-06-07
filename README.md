@@ -1,2 +1,2 @@
-# 3403_project3
-CSCI 3403: Project 3 - Emulating SSL and Password Verification
+# Username and password authentication utilizing SSL
+Basic client and server that utilize SSL to authenticate a username and password.
